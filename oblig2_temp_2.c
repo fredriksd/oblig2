@@ -21,10 +21,9 @@ int main(void)
 }
 
 //Skrive tekststrenger
-
 void lcd_write_num(unsigned char row, unsigned char col,unsigned int num)
 {
-	unsigned char buffer[];
+	char buffer[];
 	sprintf(buffer, '%d', num); //Konverterer heltall til string
 	lcd_write_string(row, col, buffer);
 }
@@ -54,6 +53,7 @@ void cursor_pos(unsigned char row, unsigned char col)
 //Sender bare instruksjoner på msb bits
 void lcdinstrhalf(unsigned char rs, unsigned char rw, unsigned char data)
 {
+	unsigned char upper_nibble = (data & 0xf0);
 	if (rs)
 		LCD_PORT &= (1 << RS_PIN);
 	else
