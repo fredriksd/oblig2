@@ -63,7 +63,6 @@ void lcdinstrhalf(unsigned char rs, unsigned char rw, unsigned char data)
 	else
 		LCD_PORT &= ~(1 << RW_PIN);
 
-	LCD_PORT |= (1 << E_PIN);
 	if (upper_nibble&(1 << 7))
 		LCD_PORT |= (1 << 7);
 	if (upper_nibble&(1 << 6))
@@ -73,7 +72,10 @@ void lcdinstrhalf(unsigned char rs, unsigned char rw, unsigned char data)
 	if (upper_nibble&(1 << 4))
 		LCD_PORT |= (1 << 4);
 
-	LCD_PORT &= ~(1 << E_PIN);	//Falling edge på Enable bit, slik at en puls er laget.
+	LCD_PORT |= (1 << E_PIN); //Toggler Enable Pin
+	_delay_us(20);
+	LCD_PORT &= ~(1 << E_PIN); //End of transmission
+	_delay_us(20);
 }
 //Sender instruksjoner på msb bits og lsb bits
 void lcdinstr(unsigned char rs, unsigned char rw, unsigned char data)
@@ -91,7 +93,6 @@ void lcdinstr(unsigned char rs, unsigned char rw, unsigned char data)
 		LCD_PORT &= ~(1 << RW_PIN);
 
 	upper_nibble = (data&0xf0)//Send først msb-bitsene
-	LCD_PORT |= (1 << E_PIN); //Toggler Enable Pin
 	if (upper_nibble&(1 << 7))
 		LCD_PORT |= (1 << 7);
 	if (upper_nibble&(1 << 6))
@@ -100,11 +101,12 @@ void lcdinstr(unsigned char rs, unsigned char rw, unsigned char data)
 		LCD_PORT |= (1 << 5);
 	if (upper_nibble&(1 << 4))
 		LCD_PORT |= (1 << 4);
-
+	LCD_PORT |= (1 << E_PIN); //Toggler Enable Pin
+	_delay_us(20);
 	LCD_PORT &= ~(1<<E_PIN); //End of transmission
+	_delay_us(20);
 
 	data = (data&0x0f); //Så lsb-bitsene
-	LCD_PORT |= (1 << E_PIN);
 	if (upper_nibble&(1 << 7))
 		LCD_PORT |= (1 << 7);
 	if (upper_nibble&(1 << 6))
@@ -114,7 +116,10 @@ void lcdinstr(unsigned char rs, unsigned char rw, unsigned char data)
 	if (upper_nibble&(1 << 4))
 		LCD_PORT |= (1 << 4);
 
-	LCD_PORT &= ~(1 << E_PIN); //Falling edge på Enable bit, slik at en puls er laget.
+	LCD_PORT |= (1 << E_PIN); //Toggler Enable Pin
+	_delay_us(20);
+	LCD_PORT &= ~(1 << E_PIN); //End of transmission
+	_delay_us(20);
 }
 
 void lcd_init(void)
@@ -146,5 +151,8 @@ void lcd_init(void)
 	_delay_us(28); //display on/off
 	lcdinstr(0, 0, 0b00000001);
 	_delay_ms(3); //clear Display
-	lcdinstr(0, 0, 0b00000110);	_delay_us(28); //entry mode set	_delay_ms(50);
+	lcdinstr(0, 0, 0b00000110);
+	_delay_us(28); //entry mode set
+	_delay_ms(50);
+
 }
