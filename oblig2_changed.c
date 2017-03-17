@@ -1,5 +1,5 @@
 /*Definisjoner og konstanter
-Gjør det enklere Â lese og forstå koden*/
+Gjør det enklere å lese og forstå koden*/
 #define F_CPU 3686400
 #define LCD_PORT PORTC
 #define RS_PIN PC1
