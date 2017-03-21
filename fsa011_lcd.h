@@ -1,5 +1,6 @@
 /************************************************************************/
-/* LCD DISPLAY BIBLIOTEK FOR ST7036.
+/* LCD-DISPLAY BIBLIOTEK FOR ST7036.
+
    INNEHOLDER FØLGENDE FUNKSJONER
    *lcd_write_string
    *lcd_write_num
@@ -35,7 +36,7 @@ void lcdinstrhalf(unsigned char rs, unsigned char rw, unsigned char data);
 void lcdinstr(unsigned char rs, unsigned char rw, unsigned char data);
 void lcd_init(void);
 
-//Konverterer tall til strenger og sender dem
+//Konverterer tall til strenger og sender dem via lcdinstr()
 void lcd_write_num(unsigned char row, unsigned char col, unsigned int num)
 {
 	unsigned char buffer[5];
@@ -108,7 +109,7 @@ void lcdinstr(unsigned char rs, unsigned char rw, unsigned char data)
 
 
 /*Initaliserer ST7036 for 4-bits modus. Ved oppstart er LCD-displayet i 8 bits modus, og Busy Flag (BF) kan ikke sjekkes før en instruksjon er blitt sendt til LCD-uK.
-En instruksjon om å sette LCD-displayet i 8-bits modus blir sendt 4 gang for å initiere en 'reset', slik at den kan settes i 4-bits modus. Deretter settes de ulike
+En instruksjon om å sette LCD-displayet i 8-bits modus blir sendt 3 gang for å initiere en 'reset', slik at den kan settes i 4-bits modus. Deretter settes de ulike
 instillingene for lcd-skjermen, slik som interface data 4 bits, display on (duh), display clear, entry mode (cursor beveges ved skriving av informasjon).
 */
 void lcd_init(void)
